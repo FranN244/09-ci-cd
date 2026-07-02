@@ -40,6 +40,6 @@ jobs:
             exit 1
           fi
         
-          gh issue comment ${{ github.event.issue.number }} --body "Gracias por tu aporte. Nos pondremos en contacto contigo lo antes posible." --author "${{ github.actor }}"
+          gh issue comment ${{ github.event.issue.number }} --body "Gracias por tu aporte. Nos pondremos en contacto contigo lo antes posible." --repo "$GITHUB_REPOSITORY"
 
 
