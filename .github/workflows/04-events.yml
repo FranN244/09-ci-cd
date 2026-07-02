@@ -20,12 +20,26 @@ jobs:
           echo "Comment: ${{ github.event.comment.body }}"
 
       - name: Comentar como bot en Github Actions
-        if: github.event_name == 'issues' && github.event.action == 'opened'
+        if: github.event_name == 'issues' && github.event.action == 'opened' && false
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           GITHUB_REPOSITORY: ${{ github.repository }}
         run:
           gh issue comment "$ISSUE_NUMBER" --body "Gracias por tu aporte. Nos pondremos en contacto contigo lo antes posible." --repo "$GITHUB_REPOSITORY"
+
+      - name: Comentar como autor en Github Actions
+        if: github.event_name == 'issues' && github.event.action == 'opened'
+        env:
+          AUTHOR_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          if [ -z "$PERSONAL_ACCESS_TOKEN" ]; then
+            echo "No hay Personal Access Token configurado" >&2
+            exit 1
+          fi
+        
+          gh issue comment ${{ github.event.issue.number }} --body "Gracias por tu aporte. Nos pondremos en contacto contigo lo antes posible." --author "${{ github.actor }}"
 
 
